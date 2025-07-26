@@ -4,9 +4,9 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Invoice Generator',
-  description: 'Invoice Generator App',
-  generator: 'suresh.app',
+  title: 'v0 App',
+  description: 'Created with v0',
+  generator: 'v0.dev',
 }
 
 export default function RootLayout({
@@ -14,21 +14,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // Define YEAR inside the component or as a constant outside if preferred
-  const YEAR = new Date().getFullYear();
-
   return (
-    // In Next.js App Router, the <html> and <body> tags are directly returned.
-    // Metadata is handled by the `metadata` export, and global styles are imported.
-    // Avoid explicit <head> tags and inline <style> blocks for global styles here.
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body>
-        {children}
-        {/* The footer is placed directly within the body after the children */}
-        <small style={{ display: 'block', marginTop: '8rem', textAlign: 'center', paddingBottom: '2rem' }}>
-          <time>{YEAR}</time> © Suresh KALEYANNAN
-        </small>
-      </body>
+    <html lang="en">
+      <head>
+        <style>{`
+html {
+  font-family: ${GeistSans.style.fontFamily};
+  --font-sans: ${GeistSans.variable};
+  --font-mono: ${GeistMono.variable};
+}
+        `}</style>
+      </head>
+      <body>{children}</body>
     </html>
   )
 }
