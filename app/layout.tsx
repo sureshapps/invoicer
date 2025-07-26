@@ -3,6 +3,8 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
+const YEAR = new Date().getFullYear()
+
 export const metadata: Metadata = {
   title: 'v0 App',
   description: 'Created with v0',
@@ -25,14 +27,16 @@ html {
 }
         `}</style>
       </head>
-      <body>{children}</body>
-      const YEAR = new Date().getFullYear()
+      <body>
+        {children}
 
-
-    <small style={{ display: 'block', marginTop: '8rem' }}>
-      <time>{YEAR}</time> © Suresh Kaleyannan.
-   
-    </small>
+        {/* Footer */}
+        <footer>
+          <small style={{ display: 'block', marginTop: '8rem', textAlign: 'center' }}>
+            <time>{YEAR}</time> © Suresh KALEYANNAN
+          </small>
+        </footer>
+      </body>
     </html>
   )
 }
