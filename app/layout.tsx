@@ -3,8 +3,6 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
-const YEAR = new Date().getFullYear()
-
 export const metadata: Metadata = {
   title: 'v0 App',
   description: 'Created with v0',
@@ -16,6 +14,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Define YEAR inside the component or as a constant outside if preferred
+  const YEAR = new Date().getFullYear();
+
   return (
     <html lang="en">
       <head>
@@ -29,13 +30,10 @@ html {
       </head>
       <body>
         {children}
-
-        {/* Footer */}
-        <footer>
-          <small style={{ display: 'block', marginTop: '8rem', textAlign: 'center' }}>
-            <time>{YEAR}</time> © Suresh KALEYANNAN
-          </small>
-        </footer>
+        {/* The footer is placed directly within the body after the children */}
+        <small style={{ display: 'block', marginTop: '8rem', textAlign: 'center', paddingBottom: '2rem' }}>
+          <time>{YEAR}</time> © Suresh KALEYANNAN
+        </small>
       </body>
     </html>
   )
