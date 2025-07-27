@@ -10,10 +10,11 @@ import { Label } from "@/components/ui/label"
 import Textarea from "@/components/ui/textarea"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Separator } from "@/components/ui/separator"
-import { Plus, Trash2, Download, Building2, Upload, X, Edit } from "lucide-react"
+import { Plus, Trash2, Download, Upload, X, Edit } from "lucide-react"
 import jsPDF from "jspdf"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface LineItem {
   id: string
@@ -505,16 +506,28 @@ export default function InvoiceGenerator() {
   }, [company, selectedContractor, currentSubtotal, currentTaxAmount, currentTotal])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        {/* Header with Theme Toggle */}
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <img src="/invoicer-icon.png" alt="Invoicer" className="w-12 h-12 rounded-xl shadow-lg" />
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Invoicer</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Professional Invoice Generator</p>
+            </div>
+          </div>
+          <ThemeToggle />
+        </div>
+
         {/* Header */}
         <Card className="border-0 shadow-md overflow-hidden">
           <CardContent className="p-6 sm:p-8 relative">
             <div className="flex flex-col-reverse sm:flex-row sm:items-start justify-between gap-6">
               {/* Invoice Title and Number (Left) */}
               <div className="text-left">
-                <h2 className="text-3xl font-bold text-gray-900">INVOICE</h2>
-                <p className="text-gray-600 mt-1">#{selectedContractor?.invoice.invoiceNumber}</p>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">INVOICE</h2>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">#{selectedContractor?.invoice.invoiceNumber}</p>
               </div>
 
               {/* Company Details (Right) */}
@@ -528,13 +541,13 @@ export default function InvoiceGenerator() {
                     />
                   </div>
                 ) : (
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-b from-blue-400 to-blue-600 shadow-lg transform transition-all duration-200 hover:scale-105 flex-shrink-0">
-                    <Building2 className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg flex-shrink-0">
+                    <img src="/invoicer-icon.png" alt="Invoicer" className="w-full h-full object-cover" />
                   </div>
                 )}
                 <div className="text-left sm:text-right">
-                  <h1 className="text-2xl font-semibold text-gray-900">{company.name}</h1>
-                  <p className="text-gray-600">{company.tagline}</p>
+                  <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{company.name}</h1>
+                  <p className="text-gray-600 dark:text-gray-400">{company.tagline}</p>
                 </div>
               </div>
             </div>
@@ -544,12 +557,12 @@ export default function InvoiceGenerator() {
         {/* Company Details */}
         <Card className="border-0 shadow-md">
           <CardHeader className="pb-4">
-            <CardTitle className="text-lg font-medium text-gray-900">Company Information</CardTitle>
+            <CardTitle className="text-lg font-medium text-gray-900 dark:text-gray-100">Company Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="company-name" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="company-name" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Company Name
                 </Label>
                 <Input
@@ -561,7 +574,7 @@ export default function InvoiceGenerator() {
                 />
               </div>
               <div>
-                <Label htmlFor="company-tagline" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="company-tagline" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Tagline
                 </Label>
                 <Input
@@ -574,11 +587,11 @@ export default function InvoiceGenerator() {
               </div>
             </div>
             <div>
-              <Label className="text-sm font-medium text-gray-700">Company Logo</Label>
+              <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Company Logo</Label>
               <div className="mt-1 flex items-center gap-4">
                 {company.logo ? (
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200">
+                    <div className="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
                       <img
                         src={company.logo || "/placeholder.svg"}
                         alt="Company Logo"
@@ -618,7 +631,9 @@ export default function InvoiceGenerator() {
                 )}
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
               </div>
-              <p className="text-xs text-gray-500 mt-2">Recommended: Square image, max 2MB (PNG, JPG, SVG)</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                Recommended: Square image, max 2MB (PNG, JPG, SVG)
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -627,11 +642,11 @@ export default function InvoiceGenerator() {
           {/* Contractor Details */}
           <Card className="border-0 shadow-md">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg font-medium text-gray-900">Bill To</CardTitle>
+              <CardTitle className="text-lg font-medium text-gray-900 dark:text-gray-100">Bill To</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label htmlFor="select-contractor" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="select-contractor" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Select Customer
                 </Label>
                 <div className="flex gap-2 mt-1">
@@ -674,26 +689,28 @@ export default function InvoiceGenerator() {
               {selectedContractor ? (
                 <>
                   <div>
-                    <Label className="text-sm font-medium text-gray-700">Name</Label>
+                    <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Name</Label>
                     <Input value={selectedContractor.name} disabled className="mt-1" />
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-700">Address</Label>
+                    <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Address</Label>
                     <Textarea value={selectedContractor.address} disabled className="mt-1 resize-none" rows={3} />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-700">Email</Label>
+                      <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</Label>
                       <Input value={selectedContractor.email} disabled className="mt-1" />
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-700">Phone</Label>
+                      <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Phone</Label>
                       <Input value={selectedContractor.phone} disabled className="mt-1" />
                     </div>
                   </div>
                 </>
               ) : (
-                <p className="text-gray-500 text-sm">No customer selected. Add a new customer to get started.</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                  No customer selected. Add a new customer to get started.
+                </p>
               )}
             </CardContent>
           </Card>
@@ -701,12 +718,12 @@ export default function InvoiceGenerator() {
           {/* Invoice Details */}
           <Card className="border-0 shadow-md">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg font-medium text-gray-900">Invoice Details</CardTitle>
+              <CardTitle className="text-lg font-medium text-gray-900 dark:text-gray-100">Invoice Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <div className="flex-1">
-                  <Label htmlFor="invoice-number" className="text-sm font-medium text-gray-700">
+                  <Label htmlFor="invoice-number" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Invoice Number
                   </Label>
                   <Input
@@ -735,7 +752,7 @@ export default function InvoiceGenerator() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="invoice-date" className="text-sm font-medium text-gray-700">
+                  <Label htmlFor="invoice-date" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Invoice Date
                   </Label>
                   <Input
@@ -752,7 +769,7 @@ export default function InvoiceGenerator() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="due-date" className="text-sm font-medium text-gray-700">
+                  <Label htmlFor="due-date" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Due Date
                   </Label>
                   <Input
@@ -770,7 +787,7 @@ export default function InvoiceGenerator() {
                 </div>
               </div>
               <div>
-                <Label htmlFor="tax-rate" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="tax-rate" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Tax Rate (%)
                 </Label>
                 <Input
@@ -798,7 +815,7 @@ export default function InvoiceGenerator() {
         <Card className="border-0 shadow-md">
           <CardHeader className="pb-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <CardTitle className="text-lg font-medium text-gray-900">Line Items</CardTitle>
+              <CardTitle className="text-lg font-medium text-gray-900 dark:text-gray-100">Line Items</CardTitle>
               <Button
                 onClick={addLineItem}
                 size="sm"
@@ -814,17 +831,21 @@ export default function InvoiceGenerator() {
               <div className="inline-block min-w-full align-middle px-4 sm:px-6">
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-gray-200">
-                      <TableHead className="text-gray-700 font-medium">Description</TableHead>
-                      <TableHead className="text-gray-700 font-medium w-20 sm:w-24">Qty</TableHead>
-                      <TableHead className="text-gray-700 font-medium w-28 sm:w-32">Price/Rate</TableHead>
-                      <TableHead className="text-gray-700 font-medium w-28 sm:w-32">Amount</TableHead>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableHead className="text-gray-700 dark:text-gray-300 font-medium">Description</TableHead>
+                      <TableHead className="text-gray-700 dark:text-gray-300 font-medium w-20 sm:w-24">Qty</TableHead>
+                      <TableHead className="text-gray-700 dark:text-gray-300 font-medium w-28 sm:w-32">
+                        Price/Rate
+                      </TableHead>
+                      <TableHead className="text-gray-700 dark:text-gray-300 font-medium w-28 sm:w-32">
+                        Amount
+                      </TableHead>
                       <TableHead className="w-10 sm:w-12"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {selectedContractor?.lineItems.map((item) => (
-                      <TableRow key={item.id} className="border-gray-200">
+                      <TableRow key={item.id} className="border-gray-200 dark:border-gray-700">
                         <TableCell className="py-3">
                           <Input
                             value={item.description}
@@ -880,7 +901,7 @@ export default function InvoiceGenerator() {
           {/* Notes */}
           <Card className="border-0 shadow-md">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg font-medium text-gray-900">Notes & Terms</CardTitle>
+              <CardTitle className="text-lg font-medium text-gray-900 dark:text-gray-100">Notes & Terms</CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea
@@ -901,23 +922,25 @@ export default function InvoiceGenerator() {
           {/* Totals */}
           <Card className="border-0 shadow-md">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg font-medium text-gray-900">Summary</CardTitle>
+              <CardTitle className="text-lg font-medium text-gray-900 dark:text-gray-100">Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Subtotal</span>
+                <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
                 <span className="font-medium">{formatCurrency(currentSubtotal)}</span>
               </div>
               {selectedContractor?.invoice.taxRate > 0 && (
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Tax ({selectedContractor.invoice.taxRate}%)</span>
+                  <span className="text-gray-600 dark:text-gray-400">Tax ({selectedContractor.invoice.taxRate}%)</span>
                   <span className="font-medium">{formatCurrency(currentTaxAmount)}</span>
                 </div>
               )}
-              <Separator className="bg-gray-200" />
+              <Separator className="bg-gray-200 dark:bg-gray-700" />
               <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold text-gray-900">Total</span>
-                <span className="text-lg font-bold text-gray-900">{formatCurrency(currentTotal)}</span>
+                <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">Total</span>
+                <span className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                  {formatCurrency(currentTotal)}
+                </span>
               </div>
             </CardContent>
           </Card>
@@ -941,8 +964,8 @@ export default function InvoiceGenerator() {
         </Card>
 
         {/* Footer */}
-        <div className="text-center py-6 border-t border-gray-200 mt-8">
-          <p className="text-sm text-gray-600">2025 © Suresh Kaleyannan</p>
+        <div className="text-center py-6 border-t border-gray-200 dark:border-gray-700 mt-8">
+          <p className="text-sm text-gray-600 dark:text-gray-400">2025 © Suresh Kaleyannan</p>
         </div>
       </div>
 
